@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Angling — Ice Fishing </title>
+  <style>
+    :root { --bg: #BEE9FF; --ice: #D3F0FF; }
+    html,body { height:100%; margin:0; font-family: Inter, Roboto, Arial; background:var(--bg); display:flex; flex-direction:column; align-items:center; }
+    header { margin-top:12px; text-align:center; }
+    h1 { margin:8px 0; font-size:20px; }
+    #ui { display:flex; gap:12px; align-items:center; margin-bottom:8px; }
+    #scoreboard, #lives { font-size:16px; }
+    #controls { display:flex; gap:8px; }
+    button { padding:6px 10px; border-radius:6px; border:1px solid #888; background:white; cursor:pointer; }
+
+
+    /* ==========================
+    RESPONSIVE GAME WRAP
+    ========================== */
+    #gameWrap {
+      border-radius:8px;
+      background:var(--ice);
+      box-shadow:0 6px 18px rgba(0,0,0,0.12);
+      padding:8px;
+      width:95vw;
+      max-width:820px;
+      aspect-ratio:820 / 520;
+      margin:0 auto;
+    }
+    canvas {
+      display: block;
+      background: linear-gradient(180deg,#dff6ff,#cdeefc);
+      border-radius: 6px;
+      touch-action: none;
+      width: 100%;
+      height: auto;
+    }
+
+
+    small { color:#234; display:block; margin-top:6px; text-align:center; }
+
+
+    /* Simple view switcher */
+    .view { display:none; }
+    .active { display:block; }
+  </style>
+</head>
+<body>
+
+
+<!-- Start Menu -->
+<div id="menu" class="view active">
+  <h1>Angling — Ice Fishing</h1>
+  <img src="images/fish_icon.png" alt="Fish icon" style="width:180px; margin:16px auto; display:block;" />
+  <p style="max-width:300px; text-align:center; margin:12px auto; font-size:14px; color:#234;">
+    Place your rods, wait for the fish, and catch them before time runs out!<br>
+    Choose a mode to start fishing.
+  </p>
+  <button id="btnSpeed">Speed Angling</button>
+  <button id="btnRegular">Regular Angling</button>
+  <button id="btnHighscore">Highscore</button>
+  <nl></nl>
+  <p>Tillbaka till <a href="/index.html">bhandd.se</a></p>
+</div>
+
+
+
+
+<!-- Game View -->
+<div id="gameView" class="view">
+  <header>
+    <div id="ui">
+      <div id="scoreboard">Score: <strong id="score">0</strong></div>
+      <div id="lives">Lives: <span id="lifeIcons">❤️❤️❤️</span></div>
+      <div id="controls">
+        <button id="endRoundBtn">End round & save score</button>
+      </div>
+    </div>
+  </header>
+  <div id="gameWrap">
+    <canvas id="game" width="820" height="520"></canvas>
+  </div>
+  <small>Click a hole to place or remove a fishing rod. Catch the fish before time runs out!</small>
+</div>
+
+  <!-- Highscore View -->
+  <div id="highscoreView" class="view">
+    <h1>🏆 Highscore</h1>
+    <h2>Speed</h2>
+    <ol id="highscoreListSpeed"></ol>
+    <h2>Regular</h2>
+    <ol id="highscoreListRegular"></ol>
+    <div id="saveScoreSection" style="display:none;">
+      <input type="text" id="playerName" placeholder="Your name" />
+      <button id="saveScoreBtn">Save score</button>
+    </div>
+    <button id="backToMenuBtn">Back to menu</button>
+  </div>
+<script>
+  /* ===============================
+     CONSTANTS
+     =============================== */
+  const START_LIVES = 3;
+  const SPEED_MIN_BITE_MS = 6000;
+  const SPEED_MAX_BITE_MS = 11000;
+  const REGULAR_MIN_BITE_MS = 480000;
+  const REGULAR_MAX_BITE_MS = 1800000;
+  const CATCH_TIME_MS_REGULAR = 60000;
+  const CATCH_TIME_MS_SPEED   = 6000;
+  const HOLE_COUNT     = 20;
+  const HOLE_MIN_DIST  = 0.12;
+  const HOLE_MARGIN    = 0.08;
+  const HOLE_SHAPE     = 'ellipse';
+  const HOLE_RX_REL    = 0.06;
+  const HOLE_RY_REL    = 0.035;
+  const ROD_WIDTH_REL  = 0.03;
+  const ROD_HEIGHT_REL = 0.09;
+  const FLAG_HEIGHT_PX = 24;
+  const FLAG_RAISE_MS  = 300;
+  const FLAG_LOWER_MS  = 360;
+
+  /* ===============================
+     STATE
+     =============================== */
+  let lives = START_LIVES;
+  let score = 0;
+  let gameMode = 'regular';
+  let holes = [];
+  let gameRunning = false;
+  let animationId = null;
+
+  let bestScores = JSON.parse(localStorage.getItem('angling_highscores_v11') || '{"speed":[],"regular":[]}');
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  let lastTime = performance.now();
+
+  /* ===============================
+     SOUND
+     =============================== */
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playTone({freq=440, type='sine', dur=0.12, vol=0.2, attack=0.01} = {}) {
+    const now = audioCtx.currentTime;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, now);
+    g.gain.setValueAtTime(0, now);
+    g.gain.linearRampToValueAtTime(vol, now + attack);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(now); o.stop(now + dur + 0.05);
+  }
+  function playPlace() { playTone({freq:660, type:'sine',   dur:0.08, vol:0.12}); }
+  function playBite()  { playTone({freq:880, type:'square', dur:0.22, vol:0.18}); }
+
+  /* ===============================
+     HELPERS
+     =============================== */
+  function updateLivesDisplay() {
+    document.getElementById('lifeIcons').textContent = '❤️'.repeat(lives);
+  }
+
+  function showView(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+  }
+
+  function clearAllTimers() {
+    holes.forEach(h => {
+      if (h.timerId) { clearTimeout(h.timerId); h.timerId = null; }
+      if (h.catchTimerId) { clearTimeout(h.catchTimerId); h.catchTimerId = null; }
+    });
+  }
+
+  function generateHoles() {
+    holes = [];
+    function randBetween(min, max){ return Math.random() * (max - min) + min; }
+    let attempts = 0;
+    while (holes.length < HOLE_COUNT && attempts < HOLE_COUNT * 300) {
+      attempts++;
+      const x = randBetween(HOLE_MARGIN, 1 - HOLE_MARGIN);
+      const y = randBetween(HOLE_MARGIN, 1 - HOLE_MARGIN);
+      const ok = holes.every(h => {
+        const dx = x - h.x, dy = y - h.y;
+        const d = Math.hypot(dx, dy);
+        return d >= HOLE_MIN_DIST;
+      });
+      if (ok) holes.push({
+        x, y,
+        rxRel: HOLE_RX_REL,
+        ryRel: HOLE_RY_REL,
+        rodPlaced: false,
+        hasBite: false,
+        flagProgress: 0,
+        timerId: null,
+        catchTimerId: null,
+        rodHighlight: false
+      });
+    }
+  }
+
+  function holePixel(h) {
+    const w = canvas.width, hgt = canvas.height;
+    return { cx: Math.round(h.x * w), cy: Math.round(h.y * hgt), rx: Math.round(h.rxRel * w), ry: Math.round(h.ryRel * hgt) };
+  }
+
+  function draw() {
+    // Fit canvas to its rendered size
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    holes.forEach(h => {
+      const p = holePixel(h);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#0B4C6C';
+      ctx.fillStyle = '#57a6c7';
+      if (HOLE_SHAPE === 'rect') {
+        ctx.beginPath(); ctx.rect(p.cx - p.rx, p.cy - p.ry, p.rx * 2, p.ry * 2); ctx.fill(); ctx.stroke();
+      } else {
+        ctx.beginPath(); ctx.ellipse(p.cx, p.cy, p.rx, p.ry, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      }
+
+      if (h.rodPlaced) {
+        const rodW = Math.round(canvas.width * ROD_WIDTH_REL);
+        const rodH = Math.round(canvas.height * ROD_HEIGHT_REL);
+        const sx = p.cx - rodW / 2;
+        const sy = p.cy - rodH / 2;
+        ctx.fillStyle = h.rodHighlight ? '#228B22' : '#8b5a2b';
+        ctx.fillRect(sx, sy, rodW, rodH);
+        ctx.strokeStyle = '#331a0b';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(sx, sy, rodW, rodH);
+      }
+
+      if (h.hasBite || h.flagProgress > 0) {
+        const raise = h.flagProgress;
+        const poleX = p.cx;
+        const poleTop = p.cy - p.ry - Math.round(FLAG_HEIGHT_PX * 1.1);
+        const poleBottom = p.cy - p.ry + 6;
+        const flagY = poleBottom - Math.round((poleBottom - poleTop) * raise);
+        ctx.beginPath(); ctx.strokeStyle = '#333';
+        ctx.moveTo(poleX, poleBottom); ctx.lineTo(poleX, poleTop); ctx.stroke();
+        ctx.fillStyle = '#d23';
+        ctx.fillRect(poleX + 2, flagY - 5, 12, 10);
+        ctx.strokeStyle = '#7a0000'; ctx.strokeRect(poleX + 2, flagY - 5, 12, 10);
+      }
+    });
+  }
+
+  function placeRod(hole) {
+    if (!gameRunning) return;
+    if (hole.rodPlaced) return;
+    hole.rodPlaced = true;
+    playPlace();
+    const [minBite, maxBite] = (gameMode === 'speed') ? [SPEED_MIN_BITE_MS, SPEED_MAX_BITE_MS] : [REGULAR_MIN_BITE_MS, REGULAR_MAX_BITE_MS];
+    const biteTime = Math.floor(Math.random() * (maxBite - minBite) + minBite);
+    hole.timerId = setTimeout(() => {
+      if (!hole.rodPlaced || !gameRunning) return;
+      hole.hasBite = true;
+      playBite();
+      const catchTime = (gameMode === 'speed') ? CATCH_TIME_MS_SPEED : CATCH_TIME_MS_REGULAR;
+      hole.catchTimerId = setTimeout(() => {
+        if (hole.hasBite && gameRunning) {
+          hole.hasBite = false;
+          lives--; updateLivesDisplay();
+          if (lives <= 0) endRound();
+        }
+      }, catchTime);
+    }, biteTime);
+  }
+
+  function removeRod(hole) {
+    hole.rodPlaced = false;
+    hole.hasBite = false;
+    if (hole.timerId) { clearTimeout(hole.timerId); hole.timerId = null; }
+    if (hole.catchTimerId) { clearTimeout(hole.catchTimerId); hole.catchTimerId = null; }
+  }
+
+  function endRound() {
+    if (!gameRunning && document.getElementById('highscoreView').classList.contains('active')) return;
+
+    gameRunning = false;
+    if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+    clearAllTimers();
+
+    showView('highscoreView');
+    document.getElementById('saveScoreSection').style.display = (score > 0) ? 'block' : 'none';
+    renderHighscores();
+  }
+
+  function renderHighscores() {
+    const listSpeed = document.getElementById('highscoreListSpeed');
+    const listRegular = document.getElementById('highscoreListRegular');
+    listSpeed.innerHTML = ''; listRegular.innerHTML = '';
+    bestScores.speed.sort((a,b) => b.score - a.score).forEach(s => {
+      const li = document.createElement('li'); li.textContent = `${s.name}: ${s.score}`; listSpeed.appendChild(li);
+    });
+    bestScores.regular.sort((a,b) => b.score - a.score).forEach(s => {
+      const li = document.createElement('li'); li.textContent = `${s.name}: ${s.score}`; listRegular.appendChild(li);
+    });
+  }
+
+  /* ===============================
+     EVENTS
+     =============================== */
+  document.getElementById('btnSpeed').onclick = () => { gameMode = 'speed'; startGame(); };
+  document.getElementById('btnRegular').onclick = () => { gameMode = 'regular'; startGame(); };
+  document.getElementById('btnHighscore').onclick = () => { showView('highscoreView'); renderHighscores(); };
+  document.getElementById('backToMenuBtn').onclick = () => { showView('menu'); };
+  document.getElementById('endRoundBtn').onclick = endRound;
+  document.getElementById('saveScoreBtn').onclick = () => {
+    if (score <= 0) return;
+    const name = document.getElementById('playerName').value.trim() || 'Unknown';
+    bestScores[gameMode].push({ name, score });
+    localStorage.setItem('angling_highscores_v11', JSON.stringify(bestScores));
+    renderHighscores();
+    document.getElementById('saveScoreSection').style.display = 'none';
+  };
+
+  /* ===============================
+     CANVAS CLICK
+     =============================== */
+  canvas.addEventListener('click', (e) => {
+    if (!gameRunning) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const hit = holes.find(h => {
+      const p = holePixel(h);
+      if (HOLE_SHAPE === 'rect') return x >= (p.cx - p.rx) && x <= (p.cx + p.rx) && y >= (p.cy - p.ry) && y <= (p.cy + p.ry);
+      else return ((x - p.cx)**2)/(p.rx*p.rx) + ((y - p.cy)**2)/(p.ry*p.ry) <= 1;
+    });
+    if (!hit) return;
+    if (hit.hasBite) {
+      score++;
+      document.getElementById('score').textContent = score;
+      hit.hasBite = false;
+      hit.rodHighlight = true;
+      setTimeout(() => hit.rodHighlight = false, 500);
+      if (hit.catchTimerId) { clearTimeout(hit.catchTimerId); hit.catchTimerId = null; }
+    } else if (hit.rodPlaced) removeRod(hit);
+    else placeRod(hit);
+  });
+
+  /* ===============================
+     GAME LOOP
+     =============================== */
+  function loop(now) {
+    if (!gameRunning) return; // stop drawing when not running
+    const dt = now - lastTime;
+    lastTime = now;
+    holes.forEach(h => {
+      if (h.hasBite && h.flagProgress < 1) h.flagProgress = Math.min(1, h.flagProgress + dt / FLAG_RAISE_MS);
+      else if (!h.hasBite && h.flagProgress > 0) h.flagProgress = Math.max(0, h.flagProgress - dt / FLAG_LOWER_MS);
+    });
+    draw();
+    if (gameRunning) animationId = requestAnimationFrame(loop);
+  }
+
+  function startGame() {
+    lives = START_LIVES; score = 0; gameRunning = true;
+    updateLivesDisplay();
+    document.getElementById('score').textContent = score;
+    generateHoles();
+    showView('gameView');
+    lastTime = performance.now();
+    if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+    animationId = requestAnimationFrame(loop);
+  }
+</script>
+</body>
+</html>
