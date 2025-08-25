@@ -1,0 +1,22 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background: #f8f9fa; /* Ljusgrå bakgrund */
+}
+
+header {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+.card {
+    border-radius: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
