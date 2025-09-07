@@ -15,6 +15,7 @@
         <p class="lead">Problemlösare och teknikentusiast</p>
         <a href="mailto:bjorn.andersson@bhand.se" class="btn btn-success btn-lg mt-3">Kontakta mig</a>
     </div>
+
 </header>
 
 <!-- Main content -->
@@ -41,6 +42,7 @@
                         <li>Nätverk och IT-infrastruktur</li>
                         <li>Projekt- och teamarbete</li>
                         <li>Service och ansvarstagande från tidigare yrkesliv</li>
+                        <li>Med mera</li>
                     </ul>
                 </div>
             </div>
@@ -76,11 +78,42 @@
             </div>
         </div>
     </div>
+
+<!--- Flash Messages -->
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <!--- Contact Form -->
+    <div class="row mt-5">
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Kontakta mig</h5>
+                    <form action="/send-message" method="post">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Namn</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Din e-postadress</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Meddelande</label>
+                            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Skicka</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
 
 <!-- Footer -->
 <footer class="bg-dark text-white text-center py-3 mt-4">
-    <p>Kontakt: <a href="mailto:bjorn.andersson@bhand.se" class="text-success">@bjorn.andersson@bhand.se</a> | <a href="https://github.com/bhandd" class="text-success">GitHub</a></p>
+    <p>Kontakt: <a href="mailto:bjorn.andersson@bhand.se" class="text-success">bjorn.andersson@bhand.se</a> | <a href="https://github.com/bhandd" class="text-success">GitHub</a></p>
 </footer>
 
 <!-- Bootstrap JS (valfritt) -->
