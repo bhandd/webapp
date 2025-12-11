@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title th:text="${title}">Björn Andersson</title>
@@ -12,8 +12,8 @@
 <header class="bg-primary text-white text-center py-5 mb-4">
     <div class="container">
         <h1><span th:text="${name}">Björn Andersson</span></h1>
-        <p class="lead">DevOps, Mjukvaruutveckling och CI/CD Automation</p>
-        <a href="#contact-form" class="btn btn-success btn-lg mt-3">Kontakta mig</a>
+        <p class="lead">DevOps, Software Development, and CI/CD Automation</p>
+        <a href="#contact-form" class="btn btn-success btn-lg mt-3">Contact Me</a>
     </div>
 
 </header>
@@ -23,12 +23,11 @@
         <div class="col">
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">Om mig</h5>
+                    <h5 class="card-title">About Me</h5>
                     <ul>
-                        Jag är student på Kungliga Tekniska Högskolan.
-                        Är teknikintresserad, tycker om programmering,
-                        mjukvaruutveckling och att samarbeta i projekt
-
+                        I am a student at KTH Royal Institute of Technology.
+                        Passionate about technology, programming,
+                        software development, and collaborative projects.
                     </ul>
                 </div>
             </div>
@@ -37,15 +36,14 @@
         <div class="col">
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">Kunskaper & Erfarenhet</h5>
+                    <h5 class="card-title">Skills & Experience</h5>
                     <ul>
-                        <li>Programmering: Java, Kotlin, C#</li>
-                        <li>Systemutveckling och fullstack-applikationer</li>
-                        <li>DevOps och molntjänster</li>
-                        <li>Nätverk och IT-infrastruktur</li>
-                        <li>Projekt- och teamarbete</li>
-                        <li>Betydande erfarenhet av arbete under ansvar och att leverera service</li>
-
+                        <li>Programming: Java, Kotlin, C#</li>
+                        <li>System Development and Fullstack Applications</li>
+                        <li>DevOps and Cloud Services</li>
+                        <li>Networking and IT Infrastructure</li>
+                        <li>Project Management and Teamwork</li>
+                        <li>Significant experience working independently and delivering service</li>
                     </ul>
                 </div>
             </div>
@@ -54,11 +52,11 @@
         <div class="col">
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">Projekt</h5>
+                    <h5 class="card-title">Projects</h5>
                     <ul>
-                        <li>Portfolio-webbsida i Spring Boot</li>
-                        <li>Webbverktyg i Angular & REST under trainee hos CGI</li>
-                        <li>Praktiska utvecklingsprojekt inom datateknik</li>
+                        <li>Portfolio Website in Spring Boot</li>
+                        <li>Web Tool in Angular & REST (CGI Trainee)</li>
+                        <li>Practical Development Projects in Computer Engineering</li>
                     </ul>
                 </div>
             </div>
@@ -67,9 +65,9 @@
         <div class="col">
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">Certifieringar</h5>
+                    <h5 class="card-title">Certifications</h5>
                     <ul>
-                        <li>B-körkort</li>
+                        <li>Driving License (Category B)</li>
                         <li>CCNA: Enterprise Networking, Security, and Automation</li>
                         <li>CCNA: Switching, Routing, and Wireless Essentials</li>
                         <li>CCNA R&S: Introduction to Networks</li>
@@ -85,21 +83,21 @@
         <div class="col">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">Kontakta mig</h5>
+                    <h5 class="card-title">Contact Me</h5>
                     <form action="/send-message" method="post">
                         <div class="mb-3">
-                            <label for="name" class="form-label">Namn</label>
+                            <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label">Din e-postadress</label>
+                            <label for="email" class="form-label">Email Address</label>
                             <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="mb-3">
-                            <label for="message" class="form-label">Meddelande</label>
+                            <label for="message" class="form-label">Message</label>
                             <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Skicka</button>
+                        <button type="submit" class="btn btn-primary">Send</button>
                     </form>
                 </div>
             </div>
@@ -110,7 +108,7 @@
 
 
 <footer class="bg-dark text-white text-center py-3 mt-4">
-    <p>Kontakt: <a href="mailto:bjorn.andersson@bhand.se" class="text-success">bjorn.andersson@bhand.se</a> | <a href="https://github.com/bhandd" class="text-success">GitHub</a> | Referenser: Elias, Benjamin, Simon, Noah</p>
+    <p>Contact: <a href="mailto:bjorn.andersson@bhand.se" class="text-success">bjorn.andersson@bhand.se</a> | <a href="https://github.com/bhandd" class="text-success">GitHub</a> | References: Elias, Benjamin, Simon, Noah</p>
 </footer>
-
-
+</body>
+</html>
