@@ -53,8 +53,8 @@ Successfully built images are stored in a Docker Hub repository.
 Real-time monitoring of application health and server resources.
 
 ### Monitoring Configuration
-* **Docker Compose:** orchestration of the monitoring stack.
-* **Prometheus:** configured to scrape metrics from the Spring Boot Actuator.
+* **Docker Compose:** Orchestration of the monitoring stack.
+* **Prometheus:** Configured to scrape metrics from the Spring Boot Actuator.
 
 ![Docker Compose Monitoring](Documentation/monitoring/docker-compose-yaml.png)
 ![Prometheus Config](Documentation/monitoring/prometheus/prometheus-yml.png)
@@ -68,6 +68,7 @@ Custom dashboards provide insights into container status and performance.
 ![Docker Stats](Documentation/ubuntu-server/docker_stats.png)
 
 ---
+
 
 ## 🛠 Run the container
 
