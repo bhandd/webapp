@@ -69,11 +69,6 @@ Custom dashboards provide insights into container status and performance.
 
 ---
 
-## 🛠 Local Development
-
-### 1. Build the Docker Image
-```bash
-docker build -t my-webpage .
 ## 🛠 Run the container
 
 1. build:
@@ -86,3 +81,4 @@ docker run -d --rm --name my-webpage -p 8080:8080 -e ZOHO_MAIL_PASSWORD="ZOHO_MA
 ctrl+c
 
 the ZOHO_MAIL_PASSWORD is located in your zoho account settings under app passwords
+```bash
