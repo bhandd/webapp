@@ -4,12 +4,12 @@ This repository hosts the Spring Boot backend for bhand.se. It features a fully 
 
 ## 🖥️ The Website
 The first page (Home) of the web application.
-![Homepage](webapp/index.png)
+![Homepage](Documentation/webapp/index.png)
 
 ## 🏗️ System Architecture
 The following diagram illustrates the high-level architecture, including traffic routing through Cloudflare and Nginx, and the containerized runtime environment.
 
-![System Architecture](system%20architecture.png)
+![System Architecture](Documentation/webapp/system%20architecture.png)
 
 ### Security & Hardening
 * **Infrastructure:** Hosted on a Linux Home Server with **SSH Hardening** (Password login disabled, Public Key Authentication only).
@@ -23,29 +23,29 @@ The following diagram illustrates the high-level architecture, including traffic
 ## 🚀 CI/CD Pipeline
 The deployment process is fully automated using GitHub Actions and Watchtower.
 
-![CI/CD Pipeline Overview](webapp/CICD-github%20Actions/CICD-pipeline%20.drawio.png)
+![CI/CD Pipeline Overview](Documentation/webapp/CICD-github%20Actions/CICD-pipeline%20.drawio.png)
 
 ### Documentation Structure
 Overview of the project's documentation and asset organization.
-![File Structure](webapp/filestructure.png)
+![File Structure](Documentation/webapp/filestructure.png)
 
 ### Step 1: Development & Git Push
 Code changes are pushed to the main branch, triggering the automated workflow.
-![Git Push Console](webapp/CICD-github%20Actions/git%20pushMarked.png)
+![Git Push Console](Documentation/webapp/CICD-github%20Actions/git%20pushMarked.png)
 
 ### Step 2: GitHub Actions Workflow
 The `ci.yml` workflow automates the build and security checks.
-![CI Workflow Config](webapp/CICD-github%20Actions/ci.yml.png)
-![Workflow History](webapp/CICD-github%20Actions/github%20actions%20updateMarked.png)
+![CI Workflow Config](Documentation/webapp/CICD-github%20Actions/ci.yml.png)
+![Workflow History](Documentation/webapp/CICD-github%20Actions/github%20actions%20updateMarked.png)
 
 ### Step 3: Docker Hub Registry
 Successfully built images are stored in a Docker Hub repository.
-![Docker Hub Registry](webapp/CICD-github%20Actions/DockerHub1.png)
-![Docker Update Evidence](webapp/CICD-github%20Actions/Docker%20update.png)
+![Docker Hub Registry](Documentation/webapp/CICD-github%20Actions/DockerHub1.png)
+![Docker Update Evidence](Documentation/webapp/CICD-github%20Actions/Docker%20update.png)
 
 ### Step 4: Automated Production Deployment
 **Watchtower** polls the registry and restarts the container when a new image is detected.
-![Watchtower Logs](webapp/CICD-github%20Actions/watchtower%20updateMarked.png)
+![Watchtower Logs](Documentation/webapp/CICD-github%20Actions/watchtower%20updateMarked.png)
 
 ---
 
@@ -69,7 +69,11 @@ Custom dashboards provide insights into container status and performance.
 
 ---
 
+## 🛠 Local Development
 
+### 1. Build the Docker Image
+```bash
+docker build -t my-webpage .
 ## 🛠 Run the container
 
 1. build:
