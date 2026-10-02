@@ -1,10 +1,33 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background:     #0000FF !important;/* #f8f9fa; /* Ljusgrå bakgrund */
+:root {
+    --kth-blue: #1954a6;
+    --kth-blue-dark: #123d7a;
+    --bs-primary: #1954a6;
+    --bs-primary-rgb: 25, 84, 166;
 }
 
-header {
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
+body .bg-primary {
+    background-color: var(--kth-blue) !important;
+}
+
+body .btn-primary {
+    background-color: var(--kth-blue) !important;
+    border-color: var(--kth-blue) !important;
+}
+
+body .btn-primary:hover,
+body .btn-primary:focus,
+body .btn-primary:active {
+    background-color: var(--kth-blue-dark) !important;
+    border-color: var(--kth-blue-dark) !important;
+}
+
+body .text-primary {
+    color: var(--kth-blue) !important;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
 }
 
 main {
@@ -24,3 +47,57 @@ main {
 footer a:hover {
     text-decoration: underline;
 }
+
+/*:root {*/
+/*    --kth-blue: #1954a6;*/
+/*    --kth-blue-dark: #123d7a;*/
+/*    --bs-primary: #1954a6;*/
+/*    --bs-primary-rgb: 25, 84, 166;*/
+/*}*/
+
+/*body .bg-primary {*/
+/*    background-color: var(--kth-blue) !important;*/
+/*}*/
+
+/*body .btn-primary {*/
+/*    background-color: var(--kth-blue) !important;*/
+/*    border-color: var(--kth-blue) !important;*/
+/*}*/
+
+/*body .btn-primary:hover,*/
+/*body .btn-primary:focus,*/
+/*body .btn-primary:active {*/
+/*    background-color: var(--kth-blue-dark) !important;*/
+/*    border-color: var(--kth-blue-dark) !important;*/
+/*}*/
+
+/*body .text-primary {*/
+/*    color: var(--kth-blue) !important;*/
+/*}*/
+
+/*body {*/
+/*    font-family: 'Arial', sans-serif;*/
+/*    background-color: #f8f9fa;*/
+/*}*/
+
+/*main {*/
+/*    background-color: #f0f0f0;*/
+/*}*/
+
+/*.card {*/
+/*    border-radius: 10px;*/
+/*    transition: transform 0.2s, box-shadow 0.2s;*/
+/*}*/
+
+/*.card:hover {*/
+/*    transform: translateY(-5px);*/
+/*    box-shadow: 0 15px 25px rgba(0,0,0,0.2);*/
+/*}*/
+
+/*footer a:hover {*/
+/*    text-decoration: underline;*/
+/*}*/
+
+/*body {*/
+/*    border: 10px solid red !important;*/
+/*}*/

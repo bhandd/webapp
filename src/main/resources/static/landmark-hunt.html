@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Landmark Hunt</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css?v=3}">
+</head>
+<body>
+
+<header class="bg-primary text-white text-center py-5 mb-4">
+    <div class="container">
+        <h1>Landmark Hunt</h1>
+        <p class="lead">Ett platsbaserat Android-spel för att upptäcka landmärken</p>
+        <a href="/" class="btn btn-light mt-3 text-primary">Tillbaka till start</a>
+    </div>
+</header>
+
+<main class="container">
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <h2>Om projektet</h2>
+            <p>Landmark Hunt är en Android-applikation utvecklad av mig och mina studiekamrater. Konceptet bygger på att användaren använder enhetens platsdata för att hitta, samla och lära sig om landmärken i sin närhet.</p>
+
+            <h3 class="mt-4">Arkitektur och Datahämtning</h3>
+            <p>Appen hanterar asynkrona anrop och platsdata enligt följande struktur:</p>
+            <ul>
+                <li><strong>Platsdata:</strong> Integration med Androids Location Services för positionering.</li>
+                <li><strong>Primär datakälla:</strong> Hämtning av beskrivningar och information via Wikipedia API.</li>
+                <li><strong>Fallback-system:</strong> För landmärken som saknar en specifik Wikipedia-artikel anropas automatiskt Wikidata API för att hämta relevant basinformation. Detta säkerställer att användargränssnittet alltid populeras med data.</li>
+            </ul>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-primary shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">Hjälp oss testa appen!</h5>
+                    <p class="card-text small">Vi befinner oss i en sluten testfas via Google Play Console. Testperioden pågår fram till den <strong>10 april 2026</strong>.</p>
+                    <div class="d-grid gap-2">
+                        <a href="#" class="btn btn-primary" target="_blank">1. Gå med i testgruppen</a>
+                        <a href="#" class="btn btn-outline-primary" target="_blank">2. Ladda ner appen</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-dark text-white text-center py-3 mt-4">
+    <p>Contact: <a href="mailto:bjorn.andersson@bhand.se" class="text-success">bjorn.andersson@bhand.se</a> | <a href="https://github.com/bhandd" class="text-success">GitHub</a></p>
+</footer>
+
+</body>
+</html>
