@@ -23,7 +23,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: bhandd/my-webpage
+          images: bhandd/webapp
           tags: |
             type=raw,value=latest
             type=sha
