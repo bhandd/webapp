@@ -12,7 +12,7 @@
     <div class="container">
         <h1>Landmark Hunt</h1>
         <p class="lead">Ett platsbaserat Android-spel för att upptäcka landmärken</p>
-        <a href="/static" class="btn btn-light mt-3 text-primary">Tillbaka till start</a>
+        <a th:href="@{/}" class="btn btn-light mt-3 text-primary">Tillbaka till start</a>
     </div>
 </header>
 
@@ -34,11 +34,10 @@
         <div class="col-md-4">
             <div class="card border-primary shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title text-primary">Hjälp oss testa appen!</h5>
-                    <p class="card-text small">Vi befinner oss i en sluten testfas via Google Play Console. Testperioden pågår fram till den <strong>10 april 2026</strong>.</p>
+                    <h5 class="card-title text-primary">Ladda ner appen</h5>
+                    <p class="card-text small">Landmark Hunt finns nu tillgänglig att ladda ner direkt via Google Play Store.</p>
                     <div class="d-grid gap-2">
-                        <a href="#" class="btn btn-primary" target="_blank">1. Gå med i testgruppen</a>
-                        <a href="#" class="btn btn-outline-primary" target="_blank">2. Ladda ner appen</a>
+                        <a href="https://play.google.com/store/apps/details?id=com.edugames.landmarkhunt&pli=1" class="btn btn-primary" target="_blank">Ladda ner på Google Play</a>
                     </div>
                 </div>
             </div>

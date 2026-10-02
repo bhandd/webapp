@@ -55,10 +55,9 @@
                 <div class="card-body">
                     <h5 class="card-title">Projects</h5>
                     <ul>
-                        <li><strong><a href="/templates/landmark-hunt.html-hunt.html" class="text-decoration-none">Landmark Hunt (Android App)</a></strong></li>
-                        <li><a href="LÄNK_TILL_DITT_EXJOBB" target="_blank" class="text-decoration-none">Examensarbete</a></li>
+                        <li><a th:href="@{/landmark-hunt}" class="text-decoration-none">Landmark Hunt (Android App)</a></li>
+                        <li><a href="https://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-377292" target="_blank" class="text-decoration-none">Examensarbete</a></li>
                         <li><a href="https://github.com/bhandd/webapp" target="_blank" class="text-decoration-none">Source Code: Portfolio CI/CD Pipeline</a></li>
-                        <li>Web Tool in Angular & REST (CGI Trainee)</li>
                     </ul>
                 </div>
             </div>
@@ -81,10 +80,7 @@
     </div>
 
     <div class="row mt-5" id="contact-form">
-        <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="SenderName" name="name" required>
-        </div>
+
 
         <div class="col">
             <div class="card shadow-sm">
