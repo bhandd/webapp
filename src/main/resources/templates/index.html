@@ -122,10 +122,9 @@
                             <label for="message" class="form-label">Message</label>
                             <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
                         </div>
+
                         <div class="mb-3">
-                            <div class="cf-turnstile"
-                                 data-sitekey="0x4AAAAAAFXY6ViRN0DTrd4C">
-                            </div>
+                                <div class="cf-turnstile" th:attr="data-sitekey=${turnstileSiteKey}"></div>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Send</button>
