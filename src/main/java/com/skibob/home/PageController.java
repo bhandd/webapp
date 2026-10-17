@@ -57,11 +57,11 @@ public class PageController {
         //control bot-check
         if (botCheck != null && !botCheck.isEmpty()) {
             // Returnera success för att lura boten, men skicka inget mail
-            redirectAttributes.addFlashAttribute("success", "Tack! Ditt meddelande har skickats.");
+            redirectAttributes.addFlashAttribute("success", "Your message was sent");
             return "redirect:/";
         }
         if (!verifyTurnstile(turnstileResponse)) {
-            redirectAttributes.addFlashAttribute("error", "Spam-skyddet misslyckades.");
+            redirectAttributes.addFlashAttribute("error", "Spam-protection failed.");
             return "redirect:/";
         }
 
@@ -75,9 +75,9 @@ public class PageController {
 
             mailSender.send(mail);
 
-            redirectAttributes.addFlashAttribute("success", "Tack! Ditt meddelande har skickats.");
+            redirectAttributes.addFlashAttribute("success", "Your message was sent");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Kunde inte skicka meddelandet.");
+            redirectAttributes.addFlashAttribute("error", "Could not send message");
         }
 
         return "redirect:/";
@@ -99,33 +99,3 @@ public class PageController {
         } catch (Exception e) { return false; }
     }
 }
-
-// todo: delet Old controller if captcha works
-//public class ContactController {
-//
-//    @Autowired
-//    private JavaMailSender mailSender;
-//
-//    @PostMapping("/send-message")
-//    public String sendMessage(@RequestParam String name,
-//                              @RequestParam String email,
-//                              @RequestParam String message,
-//                              RedirectAttributes redirectAttributes) {
-//        try {
-//            SimpleMailMessage mail = new SimpleMailMessage();
-//            mail.setFrom("bjorn.andersson@bhand.se");
-//            mail.setTo("bjorn.andersson@bhand.se"); // skickas till dig
-//            mail.setSubject("Nytt meddelande från din portfolio");
-//            mail.setText("Från: " + name + " (" + email + ")\n\n" + message);
-//
-//            mailSender.send(mail);
-//
-//            redirectAttributes.addFlashAttribute("success", "Tack! Ditt meddelande har skickats.");
-//        } catch (Exception e) {
-//            redirectAttributes.addFlashAttribute("error", "Kunde inte skicka meddelandet.");
-//        }
-//
-//        return "redirect:/";
-//    }
-//}
-//

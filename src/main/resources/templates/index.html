@@ -18,6 +18,7 @@
         <h1><span th:text="${name}">Björn Andersson</span></h1>
         <p class="lead">DevOps, Software Development, and CI/CD Automation</p>
         <a href="#contact-form" class="btn btn-light btn-lg mt-3 text-primary">Contact Me</a>
+        <a href="https://chat.bhand.se" target="_blank" rel="noopener" class="btn btn-outline-light btn-lg mt-3 ms-2">Try the AI Chat</a>
     </div>
 </header>
 
@@ -57,7 +58,8 @@
                 <div class="card-body">
                     <h5 class="card-title">Projects</h5>
                     <ul>
-                        <li><a th:href="@{/landmark-hunt}" class="text-decoration-none">Landmark Hunt (Android App)</a></li>
+                        <li><a href="https://chat.bhand.se" target="_blank" rel="noopener" class="text-decoration-none">AI Chatbot</a> <span class="text-body">- Open WebUI on my own hardware</span></li>
+                        <li><a th:href="@{/landmark-hunt}" class="text-decoration-none">Landmark Hunt</a><span class="text-body">- Android App</span></li>
                         <li><a href="https://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-377292" target="_blank" class="text-decoration-none">Bachelor Thesis</a></li>
                         <li><a href="https://github.com/bhandd/webapp" target="_blank" class="text-decoration-none">Source Code: Portfolio CI/CD Pipeline</a></li>
                     </ul>
@@ -80,6 +82,26 @@
                                 </ul>
                             </li>
                         </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">About My AI Chat</h5>
+                    <p>
+                        I've set up my own AI chat, running on my home computer. Create an account at
+                        <a href="https://chat.bhand.se" target="_blank" rel="noopener">chat.bhand.se</a>
+                        and wait for approval, which usually takes a few hours.
+                    </p>
+                    <ul class="mb-0">
+                        <li><strong>Hardware:</strong> NVIDIA GeForce RTX 3060 with 12 GB VRAM</li>
+                        <li><strong>Model(s):</strong>Qwen 2.5 Coder 14B</li>
+                        <li><strong>Note:</strong> The chat runs on my own hardware, so response times may vary depending on load.</li>
+                    </ul>
                 </div>
             </div>
         </div>
